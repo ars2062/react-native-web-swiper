@@ -71,6 +71,7 @@ export default class Screen extends React.Component {
   springConfig={{ speed: 11 }} {/* RN Animated.spring config */}
   minDistanceForAction={0.15} {/* Swipe less that 15% keep active slide */}
   positionFixed {/* Fix mobile safari vertical bounces */}
+  gap={16} {/* gap space between each slide item */}
   controlsProps={{
     DotComponent: ({ index, activeIndex, isActive, onPress }) => <Text onPress={onPress}>Your Custom Dot {activeIndex+1}/{index+1}</Text>
   }}
@@ -135,6 +136,7 @@ This is possible because `Swiper` used `cloneElement` and inject internally the 
 | onAnimationEnd       |              | `function`            | Any swiper animation end |
 | onIndexChanged       |              | `function`            | Called when active index changed |
 | controlsProps        |              | `object`              | see below |
+| gap                  | `0`          | `number`              | gap space between each slide item |
 
 ### Controls Props
 

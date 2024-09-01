@@ -209,6 +209,13 @@ interface SwiperSpringAnimationConfig {
 
 export interface SwiperProps {
     /**
+     * gap between each item
+     * 
+     * @default 0
+     */
+    gap?: number;
+
+    /**
      * Swiper vertical layout
      *
      * @default false

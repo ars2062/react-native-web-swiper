@@ -73,6 +73,7 @@ class Swiper extends React.Component {
       height: 0,
       activeIndex: props.from,
       pan: new Animated.ValueXY(),
+			gap: props.gap || 0,
     };
 
     this._animatedValueX = 0;
@@ -158,8 +159,8 @@ class Swiper extends React.Component {
 
   _fixState() {
     const { vertical } = this.props;
-    const { width, height, activeIndex } = this.state;
-    this._animatedValueX = vertical ? 0 : width * activeIndex * (I18nManager.isRTL ? 1 : -1);
+    const { width, height, activeIndex, gap } = this.state;
+    this._animatedValueX = vertical ? 0 : (width * activeIndex + activeIndex * gap) * (I18nManager.isRTL ? 1 : -1);
     this._animatedValueY = vertical ? height * activeIndex * -1 : 0;
     this.state.pan.setOffset({
       x: this._animatedValueX,
@@ -177,7 +178,7 @@ class Swiper extends React.Component {
 
   _changeIndex(delta = 1) {
     const { loop, vertical } = this.props;
-    const { width, height, activeIndex } = this.state;
+    const { width, height, activeIndex, gap } = this.state;
 
     let toValue = { x: 0, y: 0 };
     let skipChanges = !delta;
@@ -203,7 +204,7 @@ class Swiper extends React.Component {
     if (vertical) {
       toValue.y = height * -1 * calcDelta;
     } else {
-      toValue.x = width * (I18nManager.isRTL ? 1 : -1) * calcDelta;
+      toValue.x = (width * calcDelta + gap * calcDelta) * (I18nManager.isRTL ? 1 : -1);
     }
     this._spring(toValue);
 
@@ -220,7 +221,7 @@ class Swiper extends React.Component {
   }
 
   render() {
-    const { pan, x, y, width, height } = this.state;
+    const { pan, x, y, width, height, gap } = this.state;
 
     const {
       theme,
@@ -249,7 +250,7 @@ class Swiper extends React.Component {
         >
           <Animated.View
             style={StyleSheet.flatten([
-              styles.swipeArea(vertical, this.count, width, height),
+              styles.swipeArea(vertical, this.count, width, height, gap),
               swipeAreaStyle,
               {
                 transform: [{ translateX: pan.x }, { translateY: pan.y }],
@@ -353,13 +354,14 @@ const styles = {
     height,
     justifyContent: 'space-between',
   }),
-  swipeArea: (vertical, count, width, height) => ({
+  swipeArea: (vertical, count, width, height, gap) => ({
     position: 'absolute',
     top: 0,
     left: 0,
     width: vertical ? width : width * count,
     height: vertical ? height * count : height,
     flexDirection: vertical ? 'column' : 'row',
+		gap,
   }),
 };
 
